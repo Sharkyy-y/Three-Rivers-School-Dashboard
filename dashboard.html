@@ -1,1 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Three Rivers Academy</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="school-logo small">TRA</div>
+
+            <div>
+                <strong>Three Rivers</strong>
+                <span>Academy</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <a href="dashboard.html" class="active">
+                🏠 Dashboard
+            </a>
+
+            <a href="timetable.html">
+                🗓️ My Timetable
+            </a>
+
+            <a href="attendance.html">
+                ✅ Attendance
+            </a>
+
+            <a href="grades.html">
+                📊 Grades
+            </a>
+
+            <a href="assignments.html">
+                📝 Assignments
+            </a>
+
+            <a href="conduct.html">
+                ⭐ Conduct
+            </a>
+
+            <a href="events.html">
+                📅 Events
+            </a>
+
+            <a href="announcements.html">
+                📢 Announcements
+            </a>
+
+            <div class="sidebar-divider"></div>
+
+            <a href="profile.html">
+                👤 My Profile
+            </a>
+
+            <a href="settings.html">
+                🔐 Privacy & Security
+            </a>
+
+        </nav>
+
+        <button class="logout-button" onclick="logout()">
+            🚪 Log Out
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+                <p class="small-text">Student Portal</p>
+                <h1>Dashboard</h1>
+            </div>
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                    <span>3</span>
+                </div>
+
+                <div class="user-info">
+
+                    <div class="avatar">
+                        M
+                    </div>
+
+                    <div>
+                        <strong id="studentName">
+                            Meshack
+                        </strong>
+
+                        <small>
+                            Form 6
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- WELCOME -->
+
+        <section class="welcome-card">
+
+            <div>
+
+                <p>Good afternoon 👋</p>
+
+                <h2>
+                    Welcome back, <span id="welcomeName">Meshack</span>.
+                </h2>
+
+                <p>
+                    Here's what's happening with your school life today.
+                </p>
+
+            </div>
+
+            <div class="welcome-icon">
+                🎓
+            </div>
+
+        </section>
+
+
+        <!-- STATISTICS -->
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon blue">
+                    📊
+                </div>
+
+                <div>
+                    <span>Academic Average</span>
+                    <strong>78%</strong>
+                    <small class="positive">
+                        ↑ 6% this term
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    ✅
+                </div>
+
+                <div>
+                    <span>Attendance</span>
+                    <strong>96%</strong>
+                    <small class="positive">
+                        Excellent
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon purple">
+                    ⭐
+                </div>
+
+                <div>
+                    <span>Conduct</span>
+                    <strong>Excellent</strong>
+                    <small>
+                        92 character points
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon orange">
+                    📝
+                </div>
+
+                <div>
+                    <span>Assignments</span>
+                    <strong>2</strong>
+                    <small>
+                        Due this week
+                    </small>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DASHBOARD CONTENT -->
+
+        <section class="dashboard-grid">
+
+
+            <!-- TODAY -->
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Today's Timetable</h3>
+                        <p>Wednesday, September 30</p>
+                    </div>
+
+                    <a href="timetable.html">
+                        View all
+                    </a>
+
+                </div>
+
+
+                <div class="lesson">
+
+                    <div class="lesson-time">
+                        08:00
+                    </div>
+
+                    <div class="lesson-line"></div>
+
+                    <div class="lesson-info">
+
+                        <strong>
+                            Mathematics
+                        </strong>
+
+                        <span>
+                            Room 204 • Mr. Kamau
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="lesson">
+
+                    <div class="lesson-time">
+                        09:00
+                    </div>
+
+                    <div class="lesson-line"></div>
+
+                    <div class="lesson-info">
+
+                        <strong>
+                            Chemistry
+                        </strong>
+
+                        <span>
+                            Laboratory 2 • Mrs. Wanjiku
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="lesson">
+
+                    <div class="lesson-time">
+                        10:30
+                    </div>
+
+                    <div class="lesson-line"></div>
+
+                    <div class="lesson-info">
+
+                        <strong>
+                            English
+                        </strong>
+
+                        <span>
+                            Room 102 • Mr. Otieno
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ASSIGNMENTS -->
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Upcoming Assignments</h3>
+                        <p>Don't miss your deadlines</p>
+                    </div>
+
+                    <a href="assignments.html">
+                        View all
+                    </a>
+
+                </div>
+
+
+                <div class="assignment-item">
+
+                    <div class="assignment-icon">
+                        ⚗️
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Organic Chemistry
+                        </strong>
+
+                        <span>
+                            Due Friday
+                        </span>
+
+                    </div>
+
+                    <span class="status due">
+                        Due soon
+                    </span>
+
+                </div>
+
+
+                <div class="assignment-item">
+
+                    <div class="assignment-icon">
+                        📖
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            English Commentary
+                        </strong>
+
+                        <span>
+                            Due Monday
+                        </span>
+
+                    </div>
+
+                    <span class="status normal">
+                        Upcoming
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ANNOUNCEMENTS -->
+
+        <section class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3>Latest Announcements</h3>
+
+                    <p>
+                        Important school updates
+                    </p>
+
+                </div>
+
+                <a href="announcements.html">
+                    View all
+                </a>
+
+            </div>
+
+
+            <div class="announcement">
+
+                <div class="announcement-icon">
+                    📢
+                </div>
+
+                <div>
+
+                    <strong>
+                        End of Term Examinations
+                    </strong>
+
+                    <p>
+                        The examination timetable has been released.
+                    </p>
+
+                    <small>
+                        Posted today
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="announcement">
+
+                <div class="announcement-icon">
+                    🏆
+                </div>
+
+                <div>
+
+                    <strong>
+                        Sports Day
+                    </strong>
+
+                    <p>
+                        Sports Day will take place next Friday.
+                    </p>
+
+                    <small>
+                        Posted yesterday
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="js/app.js"></script>
+
+</body>
+</html>
