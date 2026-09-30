@@ -1,4 +1,32 @@
 // ==========================================
+// THREE RIVERS - AUTHENTICATION
+// ==========================================
+
+const SUPABASE_URL = "https://glyqggtzjbsppgngrymv.supabase.co/rest/v1/";
+const SUPABASE_KEY = "sb_publishable_0G3U6g24oiEqjIrcCuD-RA_ffXwgILl";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+// Check whether the user is logged in
+async function checkAuthentication() {
+
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+        window.location.href = "login.html";
+        return null;
+    }
+
+    return user;
+}
+
+
+// ==========================================
 // THREE RIVERS SCHOOL DASHBOARD
 // Demo JavaScript
 // ==========================================
@@ -251,3 +279,20 @@ console.log(
     "Three Rivers School Dashboard loaded successfully."
 );
 
+// ==========================================
+// START DASHBOARD
+// ==========================================
+
+async function startDashboard() {
+
+    const user = await checkAuthentication();
+
+    if (!user) {
+        return;
+    }
+
+    console.log("Logged in user:", user);
+
+}
+
+startDashboard();
