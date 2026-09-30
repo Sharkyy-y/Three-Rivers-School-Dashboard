@@ -1,143 +1,82 @@
-// ===============================
-// DEMO LOGIN
-// ===============================
+// ========================================
+// THREE RIVERS ACADEMY - AUTHENTICATION
+// ========================================
 
 const loginForm = document.getElementById("loginForm");
 
 if (loginForm) {
-
-    loginForm.addEventListener("submit", function(event) {
-
+    loginForm.addEventListener("submit", async function (event) {
         event.preventDefault();
 
-        const username =
-            document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
 
-        const password =
-            document.getElementById("password").value.trim();
+        const message = document.getElementById("loginMessage");
 
-        const message =
-            document.getElementById("loginMessage");
+        if (message) {
+            message.textContent = "Signing in...";
+        }
 
+        const { data, error } =
+            await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
 
-        if (!username || !password) {
+        if (error) {
+            console.error(error);
 
-            message.textContent =
-                "Please enter your Student ID and password.";
+            if (message) {
+                message.textContent = error.message;
+            }
 
             return;
         }
 
+        console.log("Login successful:", data);
 
-        /*
-            DEMO LOGIN
-
-            We will replace this with
-            Firebase Authentication.
-        */
-
-        if (
-            username === "student" &&
-            password === "1234"
-        ) {
-
-            localStorage.setItem(
-                "studentLoggedIn",
-                "true"
-            );
-
-            localStorage.setItem(
-                "studentName",
-                "Meshack"
-            );
-
-            window.location.href =
-                "dashboard.html";
-
-        } else {
-
-            message.textContent =
-                "Incorrect Student ID or password.";
-
-        }
-
+        window.location.href = "dashboard.html";
     });
-
 }
 
 
-// ===============================
+// ========================================
 // PROTECT DASHBOARD
-// ===============================
+// ========================================
 
-function checkLogin() {
+async function checkLogin() {
+    const {
+        data: { session }
+    } = await supabaseClient.auth.getSession();
 
-    const isLoggedIn =
-        localStorage.getItem("studentLoggedIn");
-
-    const currentPage =
-        window.location.pathname;
-
-
-    if (
-        !isLoggedIn &&
-        currentPage.includes("dashboard.html")
-    ) {
-
-        window.location.href =
-            "index.html";
-
+    if (!session) {
+        window.location.href = "index.html";
     }
 
+    return session;
 }
 
 
-// ===============================
+// ========================================
 // LOGOUT
-// ===============================
+// ========================================
 
-function logout() {
+async function logout() {
+    const { error } = await supabaseClient.auth.signOut();
 
-    localStorage.removeItem(
-        "studentLoggedIn"
-    );
+    if (error) {
+        console.error("Logout error:", error);
+        return;
+    }
 
-    localStorage.removeItem(
-        "studentName"
-    );
-
-    window.location.href =
-        "index.html";
+    window.location.href = "index.html";
 }
 
 
-// ===============================
-// DISPLAY STUDENT NAME
-// ===============================
+// ========================================
+// RUN LOGIN CHECK ON DASHBOARD
+// ========================================
 
-function displayStudentName() {
-
-    const studentName =
-        localStorage.getItem("studentName");
-
-    const nameElements =
-        document.querySelectorAll(
-            "#studentName, #welcomeName"
-        );
-
-    nameElements.forEach(element => {
-
-        if (studentName) {
-            element.textContent =
-                studentName;
-        }
-
-    });
-
+if (window.location.pathname.includes("dashboard.html")) {
+    checkLogin();
 }
-
-
-// RUN
-
-checkLogin();
-displayStudentName();
