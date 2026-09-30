@@ -26,36 +26,27 @@
 
             <form id="loginForm">
 
-                <label>Student ID / Email</label>
-                <input
-                    type="text"
-                    id="username"
-                    placeholder="Enter your student ID"
-                    required
-                >
+    <input
+        type="email"
+        id="email"
+        placeholder="Email"
+        required
+    >
 
-                <label>Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    required
-                >
+    <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        required
+    >
 
-                <div class="login-options">
-                    <label class="remember">
-                        <input type="checkbox">
-                        Remember me
-                    </label>
+    <button type="submit">
+        Login
+    </button>
 
-                    <a href="#">Forgot password?</a>
-                </div>
+    <p id="loginMessage"></p>
 
-                <button type="submit" class="primary-button">
-                    Sign In
-                </button>
-
-            </form>
+</form>
 
             <p id="loginMessage" class="login-message"></p>
 
