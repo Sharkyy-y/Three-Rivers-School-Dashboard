@@ -4,41 +4,45 @@
 
 const loginForm = document.getElementById("loginForm");
 
-if (loginForm) {
-    loginForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
 
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
+    const loginForm = document.getElementById("loginForm");
 
-        const message = document.getElementById("loginMessage");
+    if (loginForm) {
 
-        if (message) {
+        loginForm.addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const password =
+                document.getElementById("password").value;
+
+            const message =
+                document.getElementById("loginMessage");
+
             message.textContent = "Signing in...";
-        }
 
-        const { data, error } =
-            await supabaseClient.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
 
-        if (error) {
-            console.error(error);
-
-            if (message) {
+            if (error) {
+                console.error("LOGIN ERROR:", error);
                 message.textContent = error.message;
+                return;
             }
 
-            return;
-        }
+            console.log("LOGIN SUCCESS:", data);
 
-        console.log("Login successful:", data);
-
-        window.location.href = "dashboard.html";
-    });
-}
-
+            window.location.href = "dashboard.html";
+        });
+    }
+});
 
 // ========================================
 // PROTECT DASHBOARD
