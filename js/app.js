@@ -119,3 +119,79 @@ async function logout() {
 if (window.location.pathname.includes("dashboard.html")) {
     checkLogin();
 }
+
+async function loadTimetable() {
+
+    const {
+        data: { session }
+    } = await supabaseClient.auth.getSession();
+
+    if (!session) {
+        window.location.href = "index.html";
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from("timetables")
+        .select(`
+            id,
+            day_of_week,
+            start_time,
+            end_time,
+            room,
+            teacher_name,
+            subjects (
+                name,
+                code
+            )
+        `)
+        .eq("student_id", session.user.id)
+        .order("start_time");
+
+    if (error) {
+        console.error("Timetable error:", error);
+        return;
+    }
+
+    console.log("Timetable:", data);
+
+    const timetableContainer =
+        document.getElementById("timetableContainer");
+
+    if (!timetableContainer) return;
+
+    timetableContainer.innerHTML = "";
+
+    data.forEach(item => {
+
+        const row = document.createElement("div");
+
+        row.className = "timetable-row";
+
+        row.innerHTML = `
+            <div>
+                <strong>${item.day_of_week}</strong>
+            </div>
+
+            <div>
+                ${item.start_time} - ${item.end_time}
+            </div>
+
+            <div>
+                <strong>${item.subjects.name}</strong>
+                <br>
+                <small>${item.teacher_name || ""}</small>
+            </div>
+
+            <div>
+                ${item.room || ""}
+            </div>
+        `;
+
+        timetableContainer.appendChild(row);
+    });
+}
+
+if (window.location.pathname.includes("timetable.html")) {
+    loadTimetable();
+}
