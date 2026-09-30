@@ -44,6 +44,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+async function loadStudentProfile() {
+
+    const {
+        data: { session }
+    } = await supabaseClient.auth.getSession();
+
+    if (!session) {
+        window.location.href = "index.html";
+        return;
+    }
+
+    const userId = session.user.id;
+
+    const { data: student, error } = await supabaseClient
+        .from("students")
+        .select("*")
+        .eq("id", userId)
+        .single();
+
+    if (error) {
+        console.error("Could not load student:", error);
+        return;
+    }
+
+    console.log("Student profile:", student);
+
+    const nameElement =
+        document.getElementById("studentName");
+
+    if (nameElement) {
+        nameElement.textContent =
+            `${student.first_name} ${student.last_name}`;
+    }
+}
+
 // ========================================
 // PROTECT DASHBOARD
 // ========================================
