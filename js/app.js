@@ -239,3 +239,139 @@ async function loadStudentProfile() {
     idElement.textContent = student.student_id;
   }
 }
+
+async function loadDashboardStats() {
+    try {
+        // Get the currently logged-in student
+        const { data: { user }, error: authError } =
+            await supabaseClient.auth.getUser();
+
+        if (authError || !user) {
+            console.error("User not logged in.");
+            return;
+        }
+
+        // ==========================================
+        // 1. LOAD GRADES
+        // ==========================================
+
+        const { data: grades, error: gradesError } =
+            await supabaseClient
+                .from("grades")
+                .select("score, max_score")
+                .eq("student_id", user.id);
+
+        if (gradesError) {
+            console.error("Could not load grades:", gradesError.message);
+        } else {
+
+            let totalScore = 0;
+            let totalMaxScore = 0;
+
+            grades.forEach(grade => {
+                if (
+                    grade.score !== null &&
+                    grade.max_score !== null &&
+                    Number(grade.max_score) > 0
+                ) {
+                    totalScore += Number(grade.score);
+                    totalMaxScore += Number(grade.max_score);
+                }
+            });
+
+            let academicAverage = 0;
+
+            if (totalMaxScore > 0) {
+                academicAverage =
+                    Math.round((totalScore / totalMaxScore) * 100);
+            }
+
+            const academicElement =
+                document.getElementById("academicAverage");
+
+            if (academicElement) {
+                academicElement.textContent =
+                    `${academicAverage}%`;
+            }
+        }
+
+
+        // ==========================================
+        // 2. LOAD ATTENDANCE
+        // ==========================================
+
+        const { data: attendance, error: attendanceError } =
+            await supabaseClient
+                .from("attendance")
+                .select("status")
+                .eq("student_id", user.id);
+
+        if (attendanceError) {
+            console.error(
+                "Could not load attendance:",
+                attendanceError.message
+            );
+        } else {
+
+            let attendancePercentage = 0;
+
+            if (attendance.length > 0) {
+
+                const presentCount = attendance.filter(record => {
+                    const status =
+                        String(record.status).toLowerCase().trim();
+
+                    return status === "present";
+                }).length;
+
+                attendancePercentage =
+                    Math.round(
+                        (presentCount / attendance.length) * 100
+                    );
+            }
+
+            const attendanceElement =
+                document.getElementById("attendancePercentage");
+
+            if (attendanceElement) {
+                attendanceElement.textContent =
+                    `${attendancePercentage}%`;
+            }
+        }
+
+
+        // ==========================================
+        // 3. LOAD ASSIGNMENTS
+        // ==========================================
+
+        const { count: assignmentCount, error: assignmentsError } =
+            await supabaseClient
+                .from("assignments")
+                .select("*", {
+                    count: "exact",
+                    head: true
+                });
+
+        if (assignmentsError) {
+            console.error(
+                "Could not load assignments:",
+                assignmentsError.message
+            );
+        } else {
+
+            const assignmentElement =
+                document.getElementById("assignmentCount");
+
+            if (assignmentElement) {
+                assignmentElement.textContent =
+                    assignmentCount ?? 0;
+            }
+        }
+
+    } catch (error) {
+        console.error(
+            "Dashboard statistics error:",
+            error
+        );
+    }
+}
