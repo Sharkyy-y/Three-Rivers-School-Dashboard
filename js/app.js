@@ -196,6 +196,160 @@ if (window.location.pathname.includes("timetable.html")) {
     loadTimetable();
 }
 
+async function loadTodayTimetable() {
+
+    const timetableContainer =
+        document.getElementById("todayTimetable");
+
+    const dateElement =
+        document.getElementById("todayDate");
+
+    if (!timetableContainer) return;
+
+    // Get today's date
+    const today = new Date();
+
+    const dayNames = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+    ];
+
+    const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
+
+    const todayName = dayNames[today.getDay()];
+
+    if (dateElement) {
+        dateElement.textContent =
+            `${todayName}, ${monthNames[today.getMonth()]} ${today.getDate()}`;
+    }
+
+    try {
+
+        // Get logged-in student
+        const { data: { user }, error: authError } =
+            await supabaseClient.auth.getUser();
+
+        if (authError || !user) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        // Get today's timetable
+        const { data: timetable, error } =
+            await supabaseClient
+                .from("timetables")
+                .select(`
+                    id,
+                    start_time,
+                    end_time,
+                    room,
+                    teacher,
+                    subjects (
+                        name
+                    )
+                `)
+                .eq("student_id", user.id)
+                .eq("day_of_week", todayName)
+                .order("start_time");
+
+        if (error) {
+            console.error(
+                "Could not load timetable:",
+                error.message
+            );
+
+            timetableContainer.innerHTML =
+                "<p>Could not load timetable.</p>";
+
+            return;
+        }
+
+        if (!timetable || timetable.length === 0) {
+
+            timetableContainer.innerHTML =
+                "<p>No lessons scheduled for today.</p>";
+
+            return;
+        }
+
+        timetableContainer.innerHTML = "";
+
+        timetable.forEach(lesson => {
+
+            const lessonElement =
+                document.createElement("div");
+
+            lessonElement.className = "lesson";
+
+            const subjectName =
+                lesson.subjects?.name || "Subject";
+
+            const startTime =
+                lesson.start_time
+                    ? lesson.start_time.substring(0, 5)
+                    : "";
+
+            const location =
+                lesson.room || "Room not assigned";
+
+            const teacher =
+                lesson.teacher || "Teacher not assigned";
+
+            lessonElement.innerHTML = `
+                <div class="lesson-time">
+                    ${startTime}
+                </div>
+
+                <div class="lesson-line"></div>
+
+                <div class="lesson-info">
+
+                    <strong>
+                        ${subjectName}
+                    </strong>
+
+                    <span>
+                        ${location} • ${teacher}
+                    </span>
+
+                </div>
+            `;
+
+            timetableContainer.appendChild(
+                lessonElement
+            );
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Timetable error:",
+            error
+        );
+
+        timetableContainer.innerHTML =
+            "<p>Something went wrong loading the timetable.</p>";
+    }
+}
 
 async function loadStudentProfile() {
   const { data: { user }, error: authError } =
