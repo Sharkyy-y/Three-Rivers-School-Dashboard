@@ -79,6 +79,24 @@
 
     </aside>
 
+<main class="main-content">
+
+    <!-- STUDENT PROFILE -->
+    <section class="student-profile">
+        <h2>Welcome, <span id="studentName">Loading...</span>!</h2>
+
+        <p>
+            Class:
+            <span id="studentClass">Loading...</span>
+        </p>
+
+        <p>
+            Student ID:
+            <span id="studentId">Loading...</span>
+        </p>
+    </section>
+
+    <!-- YOUR DASHBOARD CONTENT -->
 
     <!-- MAIN -->
 
@@ -465,7 +483,13 @@
 
 </div>
 
+<script src="js/supabase.js"></script>
+    
 <script src="js/app.js"></script>
 
+<script>
+ loadStudentProfile();  
+</script> 
+    
 </body>
 </html>
