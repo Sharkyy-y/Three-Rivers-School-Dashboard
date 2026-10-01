@@ -344,30 +344,26 @@ async function loadDashboardStats() {
         // 3. LOAD ASSIGNMENTS
         // ==========================================
 
-        const { count: assignmentCount, error: assignmentsError } =
-            await supabaseClient
-                .from("assignments")
-                .select("*", {
-                    count: "exact",
-                    head: true
-                });
+       const { data: assignments, error: assignmentsError } =
+    await supabaseClient
+        .from("assignments")
+        .select("id, title, due_date");
 
-        if (assignmentsError) {
-            console.error(
-                "Could not load assignments:",
-                assignmentsError.message
-            );
-        } else {
+if (assignmentsError) {
+    console.error(
+        "Could not load assignments:",
+        assignmentsError.message
+    );
+} else {
 
-            const assignmentElement =
-                document.getElementById("assignmentCount");
+    const assignmentElement =
+        document.getElementById("assignmentCount");
 
-            if (assignmentElement) {
-                assignmentElement.textContent =
-                    assignmentCount ?? 0;
-            }
-        }
-
+    if (assignmentElement) {
+        assignmentElement.textContent =
+            assignments.length;
+    }
+}
     } catch (error) {
         console.error(
             "Dashboard statistics error:",
