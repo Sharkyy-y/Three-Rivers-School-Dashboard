@@ -195,3 +195,47 @@ async function loadTimetable() {
 if (window.location.pathname.includes("timetable.html")) {
     loadTimetable();
 }
+
+
+async function loadStudentProfile() {
+  const { data: { user }, error: authError } =
+    await supabaseClient.auth.getUser();
+
+  if (authError || !user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const { data: student, error } = await supabaseClient
+    .from("students")
+    .select("student_id, first_name, last_name, email, class_name, admission_year")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Could not load student profile:", error.message);
+    return;
+  }
+
+  if (!student) {
+    console.log("No student profile is linked to this account yet.");
+    return;
+  }
+
+  const nameElement = document.getElementById("studentName");
+  const classElement = document.getElementById("studentClass");
+  const idElement = document.getElementById("studentId");
+
+  if (nameElement) {
+    nameElement.textContent =
+      `${student.first_name} ${student.last_name}`;
+  }
+
+  if (classElement) {
+    classElement.textContent = student.class_name || "Not assigned";
+  }
+
+  if (idElement) {
+    idElement.textContent = student.student_id;
+  }
+}
